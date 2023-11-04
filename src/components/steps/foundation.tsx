@@ -1,15 +1,11 @@
 import { Label } from '@radix-ui/react-label';
-import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
-import { FormField, FormItem, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
 import { useFormContext } from 'react-hook-form';
-// import { Button } from '../ui/button';
 import { z } from 'zod';
 import { formSchemaValidate } from './formValidator';
-import { Slider } from '../ui/slider';
-import { cn } from '@/lib/utils';
-import { Button } from '../ui/button';
-import { Minus, Plus } from 'lucide-react';
-// import { Button } from '../ui/button';
+import InputSlider from '@/components/inputs/input-slider';
+import InputRadioGroup from '@/components/inputs/input-radio-group';
+import { Button } from '@/components/ui/button';
 
 const foundationMaterials = [
     {
@@ -29,118 +25,93 @@ const foundationMaterials = [
     }
 ];
 
+const foundationSizeFields = ['length', 'width', 'height'];
+
 type FoundationData = {
     foundation: string;
     foundationSize: {
-        length: 50;
-        width: 50;
-        height: 50;
+        length: number;
+        width: number;
+        height: number;
     };
 };
 
+function mapFieldNameToField(fieldName: string): keyof FoundationData {
+    if (foundationSizeFields.includes(fieldName)) {
+        return `foundationSize.${fieldName}` as keyof FoundationData;
+    }
+    throw new Error('Invalid field name');
+}
+
 const Foundation = () => {
-    const form = useFormContext<FoundationData>();
+    const { handleSubmit, control } = useFormContext<FoundationData>();
 
     const onSubmit = (values: z.infer<typeof formSchemaValidate>) => {
         console.log(values);
     };
 
     return (
-        <div>
-            <div className='flex flex-col w-full space-y-3'>
-                <Label htmlFor='gender' className='text-md lg:text-lg text-left font-semibold'>
-                    Foundation
-                </Label>
-                <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-                    <div className='space-y-8'>
-                        <div className='flex flex-col items-center justify-between text-center'>
-                            <FormField
-                                control={form.control}
-                                name='foundation'
-                                render={({ field }) => {
-                                    return (
-                                        <FormItem className='w-full mb-10'>
-                                            <FormControl>
-                                                <RadioGroup
-                                                    value={field.value}
-                                                    onValueChange={field.onChange}
-                                                    className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4'
-                                                >
-                                                    {foundationMaterials.map((foundation) => {
-                                                        return (
-                                                            <div key={foundation.name} className='w-full'>
-                                                                <RadioGroupItem
-                                                                    checked={field.value === foundation.value}
-                                                                    value={foundation.value}
-                                                                    id={foundation.name}
-                                                                    className='peer sr-only'
-                                                                />
-                                                                <Label
-                                                                    htmlFor={foundation.name}
-                                                                    className='flex h-full text-center text-xl lg:text-2xl gap-2 flex-col items-center justify-between rounded-md border-2 border-muted 
-                                                                        p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-sky-500 peer-data-[state=checked]:bg-secondary 
-                                                                        [&:has([data-state=checked])]:border-primary cursor-pointer'
-                                                                >
-                                                                    <span className='text-2xl lg:text-3xl'>
-                                                                        {foundation.icon}
-                                                                    </span>
-                                                                    {foundation.name}
-                                                                    <p className='text-sm'>aw</p>
-                                                                </Label>
-                                                            </div>
-                                                        );
-                                                    })}
-                                                </RadioGroup>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    );
-                                }}
-                            />
-                            <FormField
-                                control={form.control}
-                                name='foundationSize.height'
-                                render={({ field }) => {
-                                    return (
-                                        <FormItem className='w-full'>
-                                            <FormControl>
-                                                <div>
-                                                    <div className='flex flex-row items-center gap-4 mb-4'>
-                                                        <Button
-                                                            variant='outline'
-                                                            className='rounded-full h-[50px] w-[50px] p-0'
-                                                        >
-                                                            <Minus width={30} height={30} />
-                                                        </Button>
-                                                        <p className='text-5xl'>{field.value}</p>
-                                                        <Button
-                                                            variant='outline'
-                                                            className='rounded-full h-[50px] w-[50px] p-0'
-                                                        >
-                                                            <Plus width={30} height={30} />
-                                                        </Button>
-                                                    </div>
-
-                                                    <Slider
-                                                        onValueChange={(e) => field.onChange(e[0])}
-                                                        defaultValue={[50]}
-                                                        max={100}
-                                                        step={1}
-                                                        className='w-full'
-                                                        value={[field.value]}
-                                                    />
-                                                </div>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    );
-                                }}
-                            />
+        <div className='flex flex-col w-full space-y-3'>
+            <form onSubmit={handleSubmit(onSubmit)} className=''>
+                <div className=''>
+                    <div className='flex flex-col items-center justify-between text-center'>
+                        <FormField
+                            control={control}
+                            name='foundation'
+                            render={({ field }) => {
+                                return (
+                                    <FormItem className='w-full mb-16'>
+                                        <Label className='flex items-start uppercase text-base font-bold text-zinc-500 dark:text-secondary/70'>
+                                            Foundation
+                                        </Label>
+                                        <FormControl>
+                                            <InputRadioGroup
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                radioItems={foundationMaterials}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                );
+                            }}
+                        />
+                        <div className='w-full mb-16'>
+                            <FormLabel className='flex items-start uppercase text-base font-bold text-zinc-500 dark:text-secondary/70 mb-4'>
+                                Size of foundation
+                            </FormLabel>
+                            {foundationSizeFields.map((size) => {
+                                return (
+                                    <FormField
+                                        key={size}
+                                        control={control}
+                                        name={mapFieldNameToField(size)}
+                                        render={({ field }) => {
+                                            return (
+                                                <FormItem className='w-full mb-16'>
+                                                    <FormControl>
+                                                        <InputSlider
+                                                            size={size}
+                                                            onChange={field.onChange}
+                                                            value={field.value.toString()}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            );
+                                        }}
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
-                    {/* <Button>submit</Button> */}
-                </form>
-            </div>
+                </div>
+                <div className='border-t-2 py-3 px-8 bg-opacity-50 backdrop-blur-md bg-white z-50 fixed bottom-0 left-0 w-full flex justify-end h-[75px]'>
+                    <Button type='submit' className='h-full text-lg w-32 pulse-button'>
+                        Next
+                    </Button>
+                </div>
+            </form>
         </div>
     );
 };

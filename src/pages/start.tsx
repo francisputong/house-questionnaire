@@ -28,7 +28,7 @@ export default function Start() {
     return (
         <div className='flex items-center justify-center h-screen max-w-screen-lg mx-auto p-5'>
             {/* header */}
-            <div className='flex flex-col gap-6 lg:gap-12 text-center w-full mx-auto'>
+            <div className='flex flex-col gap-6 lg:gap-12 text-center w-full mx-auto h-full'>
                 <div className='flex flex-col w-full space-y-3'>
                     <FormProvider {...form}>
                         <Foundation />
