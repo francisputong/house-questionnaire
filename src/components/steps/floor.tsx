@@ -4,10 +4,11 @@ import CreatableSelect from 'react-select/creatable';
 import Select from 'react-select';
 
 import InputSlider from '@/components/inputs/input-slider';
-import { Button } from '@/components/ui/button';
+import Stepper from '@/components/stepper';
 import { FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { floorTypes, glassType, roomTypes, windowStyle, additionalFurniture } from './options/floor-options';
+import { cn } from '@/lib/utils';
 
 type FloorData = {
     floorDetails: {
@@ -27,11 +28,19 @@ type FloorData = {
     }[];
 };
 
-const Floor = () => {
+type Props = {
+    prevFormStep: () => void;
+    nextFormStep: () => void;
+    setFormStep: (step: number) => void;
+    formStep: number;
+};
+
+const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => {
     const { handleSubmit, control, setValue, getValues, watch } = useFormContext<FloorData>();
 
     const onSubmit = (values: FloorData) => {
         console.log(values);
+        nextFormStep();
     };
 
     watch('floorDetails');
@@ -121,8 +130,15 @@ const Floor = () => {
 
     return (
         <div className='flex flex-col w-full space-y-3'>
-            <form onSubmit={handleSubmit(onSubmit)} className='mb-36'>
-                <p className='font-bold text-xl lg:text-3xl 2xl:text-4xl text-left mb-6'>Floors</p>
+            <div className='mb-4'>
+                <p className='font-semibold tracking-tight text-xl lg:text-3xl 2xl:text-4xl text-left'>
+                    Floors and Rooms
+                </p>
+                <p className='text-muted-foreground text-sm lg:text-md text-left'>
+                    Select the number of floors and design the rooms!
+                </p>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className='flex flex-col items-center justify-between text-center'>
                     <FormField
                         control={control}
@@ -149,7 +165,13 @@ const Floor = () => {
                 </div>
                 {floorDetails.map((floorDetail, floorIndex) => {
                     return (
-                        <Card key={floorDetail.id} className='w-full mb-8 bg-gray-200'>
+                        <Card
+                            key={floorDetail.id}
+                            className={cn(
+                                'w-full bg-gray-200',
+                                floorDetails.length === floorIndex + 1 ? 'mb-24' : 'mb-8'
+                            )}
+                        >
                             <CardHeader>
                                 <CardTitle className='text-4xl'>Floor {floorIndex + 1}</CardTitle>
                             </CardHeader>
@@ -205,7 +227,7 @@ const Floor = () => {
                                                         );
                                                     }}
                                                 />
-                                                <div className='flex flex-row'>
+                                                <div className='flex flex-col md:flex-row'>
                                                     <FormField
                                                         control={control}
                                                         name={`floorDetails.${floorIndex}.rooms.${roomIndex}.roomType`}
@@ -295,13 +317,13 @@ const Floor = () => {
                                                 />
                                                 {room.windows.map((window, windowIndex) => {
                                                     return (
-                                                        <div key={room.id} className='flex flex-row'>
+                                                        <div key={room.id} className='flex flex-col md:flex-row'>
                                                             <FormField
                                                                 control={control}
                                                                 name={`floorDetails.${floorIndex}.rooms.${roomIndex}.windows.${windowIndex}.style`}
                                                                 render={({ field }) => {
                                                                     return (
-                                                                        <FormItem className='w-full mb-12'>
+                                                                        <FormItem className='w-full mb-6 md:mb-12'>
                                                                             <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
                                                                                 What is the Window style for window{' '}
                                                                                 {windowIndex + 1}?
@@ -330,7 +352,7 @@ const Floor = () => {
                                                                 name={`floorDetails.${floorIndex}.rooms.${roomIndex}.windows.${windowIndex}.glassType`}
                                                                 render={({ field }) => {
                                                                     return (
-                                                                        <FormItem className='w-full mb-12'>
+                                                                        <FormItem className='w-full mb-6 md:mb-12'>
                                                                             <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
                                                                                 What is Glass type for window{' '}
                                                                                 {windowIndex + 1}?
@@ -396,11 +418,7 @@ const Floor = () => {
                         </Card>
                     );
                 })}
-                <div className='border-t-2 py-3 px-8 bg-opacity-50 backdrop-blur-md bg-white z-50 fixed bottom-0 left-0 w-full flex justify-end h-[75px]'>
-                    <Button type='submit' className='h-full text-lg w-32 pulse-button'>
-                        Next
-                    </Button>
-                </div>
+                <Stepper backAction={prevFormStep} setFormStep={setFormStep} formStep={formStep} />
             </form>
         </div>
     );

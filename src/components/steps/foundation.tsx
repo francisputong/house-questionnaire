@@ -1,8 +1,10 @@
-import { FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
+import { useNavigate } from 'react-router-dom';
+
 import { useFormContext } from 'react-hook-form';
 import InputSlider from '@/components/inputs/input-slider';
+import { FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
 import InputRadioGroup from '@/components/inputs/input-radio-group';
-import { Button } from '@/components/ui/button';
+import Stepper from '@/components/stepper';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { foundationMaterials } from './options/foundation-options';
 
@@ -17,6 +19,12 @@ type FoundationData = {
     };
 };
 
+type Props = {
+    nextFormStep: () => void;
+    setFormStep: (step: number) => void;
+    formStep: number;
+};
+
 function mapFieldNameToField(fieldName: string): keyof FoundationData {
     if (foundationSizeFields.includes(fieldName)) {
         return `foundationSize.${fieldName}` as keyof FoundationData;
@@ -24,12 +32,10 @@ function mapFieldNameToField(fieldName: string): keyof FoundationData {
     throw new Error('Invalid field name');
 }
 
-type Props = {
-    nextFormStep: () => void;
-};
-
-const Foundation = ({ nextFormStep }: Props) => {
+const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
     const form = useFormContext<FoundationData>();
+
+    const navigate = useNavigate();
 
     const onSubmit = (values: FoundationData) => {
         nextFormStep();
@@ -38,6 +44,12 @@ const Foundation = ({ nextFormStep }: Props) => {
 
     return (
         <div className='flex flex-col w-full space-y-3'>
+            <div className='mb-4'>
+                <p className='font-semibold tracking-tight text-xl lg:text-3xl 2xl:text-4xl text-left'>Foundation</p>
+                <p className='text-muted-foreground text-sm lg:text-md text-left'>
+                    Create your foundation by choosing the details below!
+                </p>
+            </div>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className='flex flex-col items-center justify-between text-center'>
                     <FormField
@@ -92,11 +104,7 @@ const Foundation = ({ nextFormStep }: Props) => {
                         })}
                     </div>
                 </div>
-                <div className='border-t-2 py-3 px-8 bg-opacity-50 backdrop-blur-md bg-white z-50 fixed bottom-0 left-0 w-full flex justify-end h-[75px]'>
-                    <Button type='submit' className='h-full text-lg w-32 pulse-button'>
-                        Next
-                    </Button>
-                </div>
+                <Stepper backAction={() => navigate('/')} setFormStep={setFormStep} formStep={formStep} />
             </form>
         </div>
     );

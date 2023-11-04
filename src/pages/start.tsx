@@ -6,6 +6,7 @@ import Floor from '@/components/steps/floor';
 import { v4 as uuidv4 } from 'uuid';
 
 import * as z from 'zod';
+import Roof from '@/components/steps/roof';
 
 const windowSchema = z.object({
     style: z.string(),
@@ -16,6 +17,7 @@ const roomSchema = z.object({
     size: z.number().min(1),
     roomType: z.string(),
     floorType: z.string(),
+    additionalFurniture: z.string(),
     windows: z.array(windowSchema)
 });
 
@@ -24,13 +26,15 @@ const floorDetailSchema = z.object({
 });
 
 const formSchemaValidate = z.object({
-    foundationType: z.string(),
+    foundationType: z.string().min(1, 'Please select a foundation'),
     foundationSize: z.object({
         length: z.number().min(1),
         width: z.number().min(1),
         height: z.number().min(1)
     }),
-    floorDetails: z.array(floorDetailSchema)
+    floorDetails: z.array(floorDetailSchema),
+    roofType: z.string().min(1, 'Please select a roof type'),
+    gardenPlants: z.array(z.object({}))
 });
 
 export default function Start() {
@@ -38,7 +42,7 @@ export default function Start() {
 
     const nextFormStep = () => setFormStep((currentStep) => currentStep + 1);
 
-    // const prevFormStep = () => setFormStep((currentStep) => currentStep - 1);
+    const prevFormStep = () => setFormStep((currentStep) => currentStep - 1);
 
     const form = useForm({
         resolver: zodResolver(formSchemaValidate),
@@ -69,7 +73,9 @@ export default function Start() {
                         }
                     ]
                 }
-            ]
+            ],
+            roofType: 'Straw',
+            gardenPlants: [{ label: 'Azalea', value: 'Azalea' }]
         }
     });
 
@@ -77,12 +83,22 @@ export default function Start() {
         <div className='flex items-center justify-center h-screen max-w-screen-lg mx-auto p-5'>
             {/* header */}
             <div className='flex flex-col gap-6 lg:gap-12 text-center w-full mx-auto h-full'>
-                <div className='flex flex-col w-full space-y-3'>
-                    <FormProvider {...form}>
-                        {formStep === 0 && <Foundation nextFormStep={nextFormStep} />}
-                        {formStep === 1 && <Floor />}
-                    </FormProvider>
-                </div>
+                <FormProvider {...form}>
+                    {formStep === 0 && (
+                        <Foundation formStep={formStep} setFormStep={setFormStep} nextFormStep={nextFormStep} />
+                    )}
+                    {formStep === 1 && (
+                        <Floor
+                            formStep={formStep}
+                            setFormStep={setFormStep}
+                            prevFormStep={prevFormStep}
+                            nextFormStep={nextFormStep}
+                        />
+                    )}
+                    {formStep === 2 && (
+                        <Roof formStep={formStep} setFormStep={setFormStep} prevFormStep={prevFormStep} />
+                    )}
+                </FormProvider>
             </div>
         </div>
     );
