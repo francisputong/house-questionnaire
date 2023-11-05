@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { v4 as uuidv4 } from 'uuid';
@@ -36,6 +36,32 @@ const formSchemaValidate = z.object({
     roofType: z.string().min(1, 'Please select a roof type'),
     gardenPlants: z.array(z.object({ label: z.string(), value: z.string() }))
 });
+
+export type HouseFormData = {
+    foundationType: string;
+    foundationSize: {
+        length: number;
+        width: number;
+        height: number;
+    };
+    floorDetails: {
+        id: string;
+        rooms: {
+            id: string;
+            size: number;
+            roomType: string;
+            floorType: string;
+            additionalFurniture: string;
+            windows: {
+                id: string;
+                style: string;
+                glassType: string;
+            }[];
+        }[];
+    }[];
+    roofType: 'Straw' | 'Thatched' | 'Tiled' | 'Flat';
+    gardenPlants: { label: string; value: string }[];
+};
 
 export default function Start() {
     const [formStep, setFormStep] = useState(0);
@@ -78,6 +104,18 @@ export default function Start() {
             gardenPlants: [{ label: 'Azalea', value: 'Azalea' }]
         }
     });
+
+    useEffect(() => {
+        const storedForm = localStorage.getItem('houseForm');
+
+        if (storedForm) {
+            const initialData: HouseFormData = JSON.parse(storedForm);
+
+            form.setValue('foundationType', initialData.foundationType);
+            form.setValue('foundationSize', initialData.foundationSize);
+            form.setValue('floorDetails', initialData.floorDetails);
+        }
+    }, []);
 
     return (
         <div className='flex items-center justify-center h-screen max-w-screen-lg mx-auto p-5'>

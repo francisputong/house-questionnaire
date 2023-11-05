@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useFormContext } from 'react-hook-form';
 import CreatableSelect from 'react-select/creatable';
@@ -13,24 +12,7 @@ import { floorTypes, glassType, roomTypes, windowStyle, additionalFurniture } fr
 import { cn } from '@/lib/utils';
 import InputWrapper from '../inputs/input-wrapper';
 import { slideInRight } from '@/lib/animation';
-
-type FloorData = {
-    floorDetails: {
-        id: string;
-        rooms: {
-            id: string;
-            size: number;
-            roomType: string;
-            floorType: string;
-            additionalFurniture: string;
-            windows: {
-                id: string;
-                style: string;
-                glassType: string;
-            }[];
-        }[];
-    }[];
-};
+import { HouseFormData } from '@/pages/start';
 
 type Props = {
     prevFormStep: () => void;
@@ -40,22 +22,22 @@ type Props = {
 };
 
 const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => {
-    const { handleSubmit, control, setValue, getValues, watch } = useFormContext<FloorData>();
+    const { handleSubmit, control, setValue, getValues, watch } = useFormContext<HouseFormData>();
 
-    const onSubmit = (values: FloorData) => {
-        nextFormStep();
-        localStorage.setItem('houseForm', JSON.stringify(values));
-    };
+    const onSubmit = (values: HouseFormData) => {
+        const storedData = localStorage.getItem('houseForm');
+        if (storedData) {
+            const parsedData: HouseFormData = JSON.parse(storedData);
 
-    useEffect(() => {
-        const storedForm = localStorage.getItem('houseForm');
+            parsedData.floorDetails = values.floorDetails;
 
-        if (storedForm) {
-            const initialData: FloorData = JSON.parse(storedForm);
-
-            setValue('floorDetails', initialData.floorDetails);
+            localStorage.setItem('houseForm', JSON.stringify(parsedData));
+        } else {
+            localStorage.setItem('houseForm', JSON.stringify(values));
         }
-    }, []);
+
+        nextFormStep();
+    };
 
     watch('floorDetails');
 

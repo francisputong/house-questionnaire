@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { motion } from 'framer-motion';
@@ -21,6 +20,21 @@ type FoundationData = {
         width: number;
         height: number;
     };
+    floorDetails: {
+        id: string;
+        rooms: {
+            id: string;
+            size: number;
+            roomType: string;
+            floorType: string;
+            additionalFurniture: string;
+            windows: {
+                id: string;
+                style: string;
+                glassType: string;
+            }[];
+        }[];
+    }[];
 };
 
 type Props = {
@@ -41,20 +55,20 @@ const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const storedForm = localStorage.getItem('houseForm');
-
-        if (storedForm) {
-            const initialData: FoundationData = JSON.parse(storedForm);
-
-            form.setValue('foundationType', initialData.foundationType);
-            form.setValue('foundationSize', initialData.foundationSize);
-        }
-    }, []);
-
     const onSubmit = (values: FoundationData) => {
+        const storedData = localStorage.getItem('houseForm');
+        if (storedData) {
+            const parsedData: FoundationData = JSON.parse(storedData);
+
+            parsedData.foundationType = values.foundationType;
+            parsedData.foundationSize = values.foundationSize;
+
+            localStorage.setItem('houseForm', JSON.stringify(parsedData));
+        } else {
+            localStorage.setItem('houseForm', JSON.stringify(values));
+        }
+
         nextFormStep();
-        localStorage.setItem('houseForm', JSON.stringify(values));
     };
 
     return (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 import { motion } from 'framer-motion';
@@ -11,11 +12,7 @@ import flowers from '../../db/flowers.json';
 import Stepper from '../stepper';
 import InputWrapper from '../inputs/input-wrapper';
 import { slideInRight } from '@/lib/animation';
-
-type RoofData = {
-    roofType: 'Straw' | 'Thatched' | 'Tiled' | 'Flat';
-    gardenPlants: { label: string; value: string }[];
-};
+import { HouseFormData } from '@/pages/start';
 
 type Props = {
     prevFormStep: () => void;
@@ -24,12 +21,24 @@ type Props = {
 };
 
 const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
-    const form = useFormContext<RoofData>();
+    const form = useFormContext<HouseFormData>();
     const [flowersList] = useState(flowers);
+    const navigate = useNavigate();
 
-    const onSubmit = (values: RoofData) => {
-        console.log(values);
-        localStorage.setItem('houseForm', JSON.stringify(values));
+    const onSubmit = (values: HouseFormData) => {
+        const storedData = localStorage.getItem('houseForm');
+        if (storedData) {
+            const parsedData: HouseFormData = JSON.parse(storedData);
+
+            parsedData.gardenPlants = values.gardenPlants;
+            parsedData.roofType = values.roofType;
+
+            localStorage.setItem('houseForm', JSON.stringify(parsedData));
+        } else {
+            localStorage.setItem('houseForm', JSON.stringify(values));
+        }
+
+        navigate('/finish');
     };
 
     const flowerOptions = flowersList.flowerlist.map((flower) => ({
