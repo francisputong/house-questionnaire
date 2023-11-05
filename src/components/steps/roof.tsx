@@ -3,11 +3,12 @@ import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
 import InputRadioGroup from '@/components/inputs/input-radio-group';
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { FormField } from '@/components/ui/form';
 import { roofTypes } from './options/roof-options';
 
 import flowers from '../../db/flowers.json';
 import Stepper from '../stepper';
+import InputWrapper from '../inputs/input-wrapper';
 
 type RoofData = {
     roofType: 'straw' | 'thatched' | 'tiled' | 'flat';
@@ -50,19 +51,13 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
                         name='roofType'
                         render={({ field }) => {
                             return (
-                                <FormItem className='w-full mb-16'>
-                                    <FormLabel className='flex items-start uppercase text-base font-bold text-zinc-500 dark:text-secondary/70'>
-                                        Roof type
-                                    </FormLabel>
-                                    <FormControl>
-                                        <InputRadioGroup
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            radioItems={roofTypes}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                                <InputWrapper label='what is the roof type?' className='mb-16'>
+                                    <InputRadioGroup
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        radioItems={roofTypes}
+                                    />
+                                </InputWrapper>
                             );
                         }}
                     />
@@ -71,25 +66,19 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
                         name='gardenPlants'
                         render={({ field }) => {
                             return (
-                                <FormItem className='w-full mb-10'>
-                                    <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                        Choose your garden plants
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            isMulti={true}
-                                            value={field.value}
-                                            onChange={(option) => {
-                                                field.onChange(option);
-                                            }}
-                                            menuPlacement='top'
-                                            className='w-1/2'
-                                            closeMenuOnSelect={false}
-                                            options={flowerOptions}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                                <InputWrapper className='mb-10' label='choose your garden plants'>
+                                    <Select
+                                        isMulti={true}
+                                        value={field.value}
+                                        onChange={(option) => {
+                                            field.onChange(option);
+                                        }}
+                                        menuPlacement='top'
+                                        className='w-1/2'
+                                        closeMenuOnSelect={false}
+                                        options={flowerOptions}
+                                    />
+                                </InputWrapper>
                             );
                         }}
                     />

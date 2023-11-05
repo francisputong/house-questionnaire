@@ -6,10 +6,11 @@ import Select from 'react-select';
 
 import InputSlider from '@/components/inputs/input-slider';
 import Stepper from '@/components/stepper';
-import { FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
+import { FormField } from '@/components/ui/form';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { floorTypes, glassType, roomTypes, windowStyle, additionalFurniture } from './options/floor-options';
 import { cn } from '@/lib/utils';
+import InputWrapper from '../inputs/input-wrapper';
 
 type FloorData = {
     floorDetails: {
@@ -156,20 +157,14 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                         name='floorDetails'
                         render={({ field }) => {
                             return (
-                                <FormItem className='w-full mb-12'>
-                                    <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                        what is the Floor Count?
-                                    </FormLabel>
-                                    <FormControl>
-                                        <InputSlider
-                                            min={1}
-                                            max={5}
-                                            onChange={handleFloorCountChange}
-                                            value={field.value.length.toString()}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                                <InputWrapper label='what is the floor count?'>
+                                    <InputSlider
+                                        min={1}
+                                        max={5}
+                                        onChange={handleFloorCountChange}
+                                        value={field.value.length.toString()}
+                                    />
+                                </InputWrapper>
                             );
                         }}
                     />
@@ -192,20 +187,14 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                     name={`floorDetails.${floorIndex}.rooms`}
                                     render={({ field }) => {
                                         return (
-                                            <FormItem className='w-full mb-12'>
-                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                    What is the room count?
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <InputSlider
-                                                        min={1}
-                                                        max={50}
-                                                        onChange={(value) => handleRoomCountChange(value, floorIndex)}
-                                                        value={field.value.length.toString()}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
+                                            <InputWrapper label='What is the room count?'>
+                                                <InputSlider
+                                                    min={1}
+                                                    max={50}
+                                                    onChange={(value) => handleRoomCountChange(value, floorIndex)}
+                                                    value={field.value.length.toString()}
+                                                />
+                                            </InputWrapper>
                                         );
                                     }}
                                 />
@@ -221,20 +210,14 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                     name={`floorDetails.${floorIndex}.rooms.${roomIndex}.size`}
                                                     render={({ field }) => {
                                                         return (
-                                                            <FormItem className='w-full mb-12'>
-                                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                                    What is the room size in square meters?
-                                                                </FormLabel>
-                                                                <FormControl>
-                                                                    <InputSlider
-                                                                        min={50}
-                                                                        max={300}
-                                                                        onChange={field.onChange}
-                                                                        value={field.value.toString()}
-                                                                    />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </FormItem>
+                                                            <InputWrapper label='What is the room size in square meters?'>
+                                                                <InputSlider
+                                                                    min={50}
+                                                                    max={300}
+                                                                    onChange={field.onChange}
+                                                                    value={field.value.toString()}
+                                                                />
+                                                            </InputWrapper>
                                                         );
                                                     }}
                                                 />
@@ -244,29 +227,23 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                         name={`floorDetails.${floorIndex}.rooms.${roomIndex}.roomType`}
                                                         render={({ field }) => {
                                                             return (
-                                                                <FormItem className='w-full mb-6'>
-                                                                    <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                                        What is the room Type?
-                                                                    </FormLabel>
-                                                                    <FormControl>
-                                                                        <Select
-                                                                            value={{
-                                                                                value: field.value,
-                                                                                label: field.value
-                                                                            }}
-                                                                            onChange={(option) => {
-                                                                                setValue(
-                                                                                    `floorDetails.${floorIndex}.rooms.${roomIndex}.additionalFurniture`,
-                                                                                    ''
-                                                                                );
-                                                                                field.onChange(option?.label);
-                                                                            }}
-                                                                            className='w-[200px]'
-                                                                            options={roomTypes}
-                                                                        />
-                                                                    </FormControl>
-                                                                    <FormMessage />
-                                                                </FormItem>
+                                                                <InputWrapper label='what is the room type?'>
+                                                                    <Select
+                                                                        value={{
+                                                                            value: field.value,
+                                                                            label: field.value
+                                                                        }}
+                                                                        onChange={(option) => {
+                                                                            setValue(
+                                                                                `floorDetails.${floorIndex}.rooms.${roomIndex}.additionalFurniture`,
+                                                                                ''
+                                                                            );
+                                                                            field.onChange(option?.label);
+                                                                        }}
+                                                                        className='w-[200px]'
+                                                                        options={roomTypes}
+                                                                    />
+                                                                </InputWrapper>
                                                             );
                                                         }}
                                                     />
@@ -275,54 +252,42 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                         name={`floorDetails.${floorIndex}.rooms.${roomIndex}.floorType`}
                                                         render={({ field }) => {
                                                             return (
-                                                                <FormItem className='w-full mb-12'>
-                                                                    <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                                        What is the floor Type?
-                                                                    </FormLabel>
-                                                                    <FormControl>
-                                                                        <Select
-                                                                            value={{
-                                                                                value: field.value,
-                                                                                label: field.value
-                                                                            }}
-                                                                            onChange={(option) => {
-                                                                                field.onChange(option?.label);
-                                                                            }}
-                                                                            className='w-[200px]'
-                                                                            options={floorTypes}
-                                                                        />
-                                                                    </FormControl>
-                                                                    <FormMessage />
-                                                                </FormItem>
+                                                                <InputWrapper label='what is the floor type?'>
+                                                                    <Select
+                                                                        value={{
+                                                                            value: field.value,
+                                                                            label: field.value
+                                                                        }}
+                                                                        onChange={(option) => {
+                                                                            field.onChange(option?.label);
+                                                                        }}
+                                                                        className='w-[200px]'
+                                                                        options={floorTypes}
+                                                                    />
+                                                                </InputWrapper>
                                                             );
                                                         }}
                                                     />
                                                 </div>
-
                                                 <FormField
                                                     control={control}
                                                     name={`floorDetails.${floorIndex}.rooms.${roomIndex}.windows`}
                                                     render={({ field }) => {
                                                         return (
-                                                            <FormItem className='w-full mb-12'>
-                                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                                    How many windows?
-                                                                </FormLabel>
-                                                                <FormControl>
-                                                                    <InputSlider
-                                                                        min={1}
-                                                                        max={15}
-                                                                        onChange={(value) =>
-                                                                            handleWindowCountChange(
-                                                                                value,
-                                                                                floorIndex,
-                                                                                roomIndex
-                                                                            )
-                                                                        }
-                                                                        value={field.value.length.toString()}
-                                                                    />
-                                                                </FormControl>
-                                                            </FormItem>
+                                                            <InputWrapper label='how many windows?'>
+                                                                <InputSlider
+                                                                    min={1}
+                                                                    max={15}
+                                                                    onChange={(value) =>
+                                                                        handleWindowCountChange(
+                                                                            value,
+                                                                            floorIndex,
+                                                                            roomIndex
+                                                                        )
+                                                                    }
+                                                                    value={field.value.length.toString()}
+                                                                />
+                                                            </InputWrapper>
                                                         );
                                                     }}
                                                 />
@@ -334,27 +299,25 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                                 name={`floorDetails.${floorIndex}.rooms.${roomIndex}.windows.${windowIndex}.style`}
                                                                 render={({ field }) => {
                                                                     return (
-                                                                        <FormItem className='w-full mb-6 md:mb-12'>
-                                                                            <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                                                What is the Window style for window{' '}
-                                                                                {windowIndex + 1}?
-                                                                            </FormLabel>
-                                                                            <FormControl>
-                                                                                <CreatableSelect
-                                                                                    className='w-[200px]'
-                                                                                    value={{
-                                                                                        value: field.value,
-                                                                                        label: field.value
-                                                                                    }}
-                                                                                    onChange={(option) => {
-                                                                                        field.onChange(option?.label);
-                                                                                    }}
-                                                                                    options={windowStyle}
-                                                                                    isSearchable
-                                                                                />
-                                                                            </FormControl>
-                                                                            <FormMessage />
-                                                                        </FormItem>
+                                                                        <InputWrapper
+                                                                            className='mb-6 md:mb-12'
+                                                                            label={`what is the window style for window ${
+                                                                                windowIndex + 1
+                                                                            }`}
+                                                                        >
+                                                                            <CreatableSelect
+                                                                                className='w-[200px]'
+                                                                                value={{
+                                                                                    value: field.value,
+                                                                                    label: field.value
+                                                                                }}
+                                                                                onChange={(option) => {
+                                                                                    field.onChange(option?.label);
+                                                                                }}
+                                                                                options={windowStyle}
+                                                                                isSearchable
+                                                                            />
+                                                                        </InputWrapper>
                                                                     );
                                                                 }}
                                                             />
@@ -363,27 +326,25 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                                 name={`floorDetails.${floorIndex}.rooms.${roomIndex}.windows.${windowIndex}.glassType`}
                                                                 render={({ field }) => {
                                                                     return (
-                                                                        <FormItem className='w-full mb-6 md:mb-12'>
-                                                                            <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                                                What is Glass type for window{' '}
-                                                                                {windowIndex + 1}?
-                                                                            </FormLabel>
-                                                                            <FormControl>
-                                                                                <CreatableSelect
-                                                                                    className='w-[200px]'
-                                                                                    value={{
-                                                                                        value: field.value,
-                                                                                        label: field.value
-                                                                                    }}
-                                                                                    onChange={(option) => {
-                                                                                        field.onChange(option?.label);
-                                                                                    }}
-                                                                                    options={glassType}
-                                                                                    isSearchable
-                                                                                />
-                                                                            </FormControl>
-                                                                            <FormMessage />
-                                                                        </FormItem>
+                                                                        <InputWrapper
+                                                                            className='mb-6 md:mb-12'
+                                                                            label={`What is Glass type for window ${
+                                                                                windowIndex + 1
+                                                                            }`}
+                                                                        >
+                                                                            <CreatableSelect
+                                                                                className='w-[200px]'
+                                                                                value={{
+                                                                                    value: field.value,
+                                                                                    label: field.value
+                                                                                }}
+                                                                                onChange={(option) => {
+                                                                                    field.onChange(option?.label);
+                                                                                }}
+                                                                                options={glassType}
+                                                                                isSearchable
+                                                                            />
+                                                                        </InputWrapper>
                                                                     );
                                                                 }}
                                                             />
@@ -397,27 +358,24 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                         const roomType =
                                                             floorDetails[floorIndex].rooms[roomIndex].roomType;
                                                         return (
-                                                            <FormItem className='w-full mb-10'>
-                                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
-                                                                    Additional furnitures for {roomType}
-                                                                </FormLabel>
-                                                                <FormControl>
-                                                                    <Select
-                                                                        value={{
-                                                                            value: field.value,
-                                                                            label: field.value
-                                                                        }}
-                                                                        onChange={(option) => {
-                                                                            field.onChange(option?.label);
-                                                                        }}
-                                                                        className='w-[200px]'
-                                                                        options={additionalFurniture[roomType].map(
-                                                                            (data) => ({ label: data, value: data })
-                                                                        )}
-                                                                    />
-                                                                </FormControl>
-                                                                <FormMessage />
-                                                            </FormItem>
+                                                            <InputWrapper
+                                                                className='mb-10'
+                                                                label={`Additional furnitures for ${roomType}`}
+                                                            >
+                                                                <Select
+                                                                    value={{
+                                                                        value: field.value,
+                                                                        label: field.value
+                                                                    }}
+                                                                    onChange={(option) => {
+                                                                        field.onChange(option?.label);
+                                                                    }}
+                                                                    className='w-[200px]'
+                                                                    options={additionalFurniture[roomType].map(
+                                                                        (data) => ({ label: data, value: data })
+                                                                    )}
+                                                                />
+                                                            </InputWrapper>
                                                         );
                                                     }}
                                                 />

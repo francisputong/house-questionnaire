@@ -2,12 +2,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFormContext } from 'react-hook-form';
 import InputSlider from '@/components/inputs/input-slider';
-import { FormField, FormItem, FormControl, FormMessage, FormLabel } from '@/components/ui/form';
+import { FormField, FormLabel } from '@/components/ui/form';
 import InputRadioGroup from '@/components/inputs/input-radio-group';
 import Stepper from '@/components/stepper';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { foundationMaterials } from './options/foundation-options';
 import { useEffect } from 'react';
+import InputWrapper from '../inputs/input-wrapper';
 
 const foundationSizeFields = ['length', 'width', 'height'];
 
@@ -69,19 +70,13 @@ const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
                         name='foundationType'
                         render={({ field }) => {
                             return (
-                                <FormItem className='w-full mb-16'>
-                                    <FormLabel className='flex items-start uppercase text-base font-bold text-zinc-500 dark:text-secondary/70'>
-                                        Foundation
-                                    </FormLabel>
-                                    <FormControl>
-                                        <InputRadioGroup
-                                            value={field.value}
-                                            onChange={field.onChange}
-                                            radioItems={foundationMaterials}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
+                                <InputWrapper label='Foundation'>
+                                    <InputRadioGroup
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        radioItems={foundationMaterials}
+                                    />
+                                </InputWrapper>
                             );
                         }}
                     />
@@ -97,18 +92,15 @@ const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
                                     name={mapFieldNameToField(size)}
                                     render={({ field }) => {
                                         return (
-                                            <FormItem className='w-full mb-16'>
-                                                <FormControl>
-                                                    <InputSlider
-                                                        min={50}
-                                                        max={300}
-                                                        label={`${capitalizeFirstLetter(size)} in meters`}
-                                                        onChange={field.onChange}
-                                                        value={field.value.toString()}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
+                                            <InputWrapper>
+                                                <InputSlider
+                                                    min={50}
+                                                    max={300}
+                                                    label={`${capitalizeFirstLetter(size)} in meters`}
+                                                    onChange={field.onChange}
+                                                    value={field.value.toString()}
+                                                />
+                                            </InputWrapper>
                                         );
                                     }}
                                 />
