@@ -1,5 +1,5 @@
 describe('Multi Step Form', () => {
-    it('should fill out the foundation form and store data in localStorage', () => {
+    it('should fill form for step 1 (Foundation) and store data in localStorage', () => {
         cy.visit('/start');
 
         /**
@@ -33,10 +33,27 @@ describe('Multi Step Form', () => {
                 expect(parsedData.foundationSize.width).to.equal(51);
                 expect(parsedData.foundationSize.height).to.equal(51);
             });
+        cy.get('[data-cy=submit-button]').click();
+        cy.get('[data-cy=submit-button]').click();
 
-        /**
-         * Floor
-         * */
+        cy.get('[data-cy=finish-button]').click();
+
+        cy.window().then((win) => {
+            const keyToCheck = 'houseForm';
+
+            expect(win.localStorage.getItem(keyToCheck)).to.be.null;
+        });
+
+        cy.url().should('eq', Cypress.config().baseUrl);
+    });
+
+    it('should fill form for step 2 (Floors) and store data in localStorage', () => {
+        cy.visit('/start');
+        cy.get('[data-cy=Slab]').click();
+
+        cy.get('[data-cy=submit-button]').click();
+        const n = 4;
+
         for (let i = 0; i < n; i++) {
             cy.get(`[data-cy=increase-floor-0-rooms-0-size]`).click();
         }
@@ -69,9 +86,25 @@ describe('Multi Step Form', () => {
                 expect(firstRooms[0].windows[0].glassType).to.equal('Triple Glazed');
             });
 
-        /**
-         * Roof and Garden
-         * */
+        cy.get('[data-cy=submit-button]').click();
+        cy.get('[data-cy=finish-button]').click();
+
+        cy.window().then((win) => {
+            const keyToCheck = 'houseForm';
+
+            expect(win.localStorage.getItem(keyToCheck)).to.be.null;
+        });
+
+        cy.url().should('eq', Cypress.config().baseUrl);
+    });
+
+    it('should fill form for step 3 (Roof and Garden)', () => {
+        cy.visit('/start');
+        cy.get('[data-cy=Slab]').click();
+
+        cy.get('[data-cy=submit-button]').click();
+        cy.get('[data-cy=submit-button]').click();
+
         cy.get('[data-cy=Tiled]').click();
         cy.get(`#gardenPlants`).type('rosa bur{enter}');
 
