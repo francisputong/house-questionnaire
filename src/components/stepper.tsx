@@ -58,7 +58,7 @@ const Stepper = ({ backAction, setFormStep, formStep }: Props) => {
                     🪴
                 </Button>
             </div>
-            <Button type='submit' className='h-12 md:h-full text-lg w-32 pulse-button'>
+            <Button data-cy='submit-button' type='submit' className='h-12 md:h-full text-lg w-32 pulse-button'>
                 Next
             </Button>
         </div>

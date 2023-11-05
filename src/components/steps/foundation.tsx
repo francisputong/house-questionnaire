@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useFormContext } from 'react-hook-form';
 import { motion } from 'framer-motion';
 
-import InputSlider from '@/components/inputs/input-slider';
 import { FormField, FormLabel } from '@/components/ui/form';
-import InputRadioGroup from '@/components/inputs/input-radio-group';
-import Stepper from '@/components/stepper';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { foundationMaterials } from './options/foundation-options';
-import InputWrapper from '@/components/inputs/input-wrapper';
 import { slideInRight } from '@/lib/animation';
+import InputSlider from '@/components/inputs/input-slider';
+import Stepper from '@/components/stepper';
+import InputRadioGroup from '@/components/inputs/input-radio-group';
+import InputWrapper from '@/components/inputs/input-wrapper';
 
 const foundationSizeFields = ['length', 'width', 'height'];
 
@@ -96,6 +96,7 @@ const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
                                         return (
                                             <InputWrapper>
                                                 <InputSlider
+                                                    name={size}
                                                     min={50}
                                                     max={300}
                                                     label={`${capitalizeFirstLetter(size)} in meters`}

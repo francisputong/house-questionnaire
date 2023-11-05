@@ -13,7 +13,7 @@ import InputWrapper from '../inputs/input-wrapper';
 import { slideInRight } from '@/lib/animation';
 
 type RoofData = {
-    roofType: 'straw' | 'thatched' | 'tiled' | 'flat';
+    roofType: 'Straw' | 'Thatched' | 'Tiled' | 'Flat';
     gardenPlants: { label: string; value: string }[];
 };
 
@@ -28,6 +28,7 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
     const [flowersList] = useState(flowers);
 
     const onSubmit = (values: RoofData) => {
+        console.log(values);
         localStorage.setItem('houseForm', JSON.stringify(values));
     };
 
@@ -70,6 +71,7 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
                             return (
                                 <InputWrapper className='mb-10' label='choose your garden plants'>
                                     <Select
+                                        id='gardenPlants'
                                         isMulti={true}
                                         value={field.value}
                                         onChange={(option) => {

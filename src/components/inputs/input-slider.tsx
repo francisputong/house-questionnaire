@@ -7,10 +7,11 @@ type Props = {
     label?: string;
     min: number;
     max: number;
+    name: string;
     onChange: (value: number) => void;
 };
 
-const InputSlider = ({ value, label, min, max, onChange }: Props) => {
+const InputSlider = ({ value, label, min, max, name, onChange }: Props) => {
     const incrementCounter = (value: number) => {
         return value + 1;
     };
@@ -24,6 +25,7 @@ const InputSlider = ({ value, label, min, max, onChange }: Props) => {
             <div className='flex flex-col w-fit mb-4'>
                 <div className='flex flex-row items-center gap-4'>
                     <Button
+                        data-cy={`decrease-${name}`}
                         disabled={Number(value) === min}
                         onClick={(e) => {
                             e.preventDefault();
@@ -36,6 +38,7 @@ const InputSlider = ({ value, label, min, max, onChange }: Props) => {
                     </Button>
                     <p className='text-4xl font-bold w-16'>{value}</p>
                     <Button
+                        data-cy={`increase-${name}`}
                         disabled={Number(value) === max}
                         onClick={(e) => {
                             e.preventDefault();

@@ -34,7 +34,7 @@ const formSchemaValidate = z.object({
     }),
     floorDetails: z.array(floorDetailSchema),
     roofType: z.string().min(1, 'Please select a roof type'),
-    gardenPlants: z.array(z.object({}))
+    gardenPlants: z.array(z.object({ label: z.string(), value: z.string() }))
 });
 
 export default function Start() {

@@ -28,6 +28,7 @@ const InputRadioGroup = ({ value, radioItems, onChange }: Props) => {
                             className='peer sr-only'
                         />
                         <Label
+                            data-cy={item.name}
                             htmlFor={item.name}
                             className='flex h-full text-center text-xl gap-2 flex-col items-center justify-between rounded-md border-2 border-muted 
                                     p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-sky-500 peer-data-[state=checked]:bg-secondary 

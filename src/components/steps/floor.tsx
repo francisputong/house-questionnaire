@@ -162,6 +162,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                 return (
                                     <InputWrapper label='what is the floor count?'>
                                         <InputSlider
+                                            name='floorCount'
                                             min={1}
                                             max={5}
                                             onChange={handleFloorCountChange}
@@ -192,6 +193,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                             return (
                                                 <InputWrapper label='What is the room count?'>
                                                     <InputSlider
+                                                        name={`floor-${floorIndex}-rooms`}
                                                         min={1}
                                                         max={50}
                                                         onChange={(value) => handleRoomCountChange(value, floorIndex)}
@@ -215,6 +217,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                             return (
                                                                 <InputWrapper label='What is the room size in square meters?'>
                                                                     <InputSlider
+                                                                        name={`floor-${floorIndex}-rooms-${roomIndex}-size`}
                                                                         min={50}
                                                                         max={300}
                                                                         onChange={field.onChange}
@@ -232,6 +235,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                                 return (
                                                                     <InputWrapper label='what is the room type?'>
                                                                         <Select
+                                                                            id={`floorDetails-${floorIndex}-rooms-${roomIndex}-roomType`}
                                                                             value={{
                                                                                 value: field.value,
                                                                                 label: field.value
@@ -257,6 +261,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                                 return (
                                                                     <InputWrapper label='what is the floor type?'>
                                                                         <Select
+                                                                            id={`floorDetails-${floorIndex}-rooms-${roomIndex}-floorType`}
                                                                             value={{
                                                                                 value: field.value,
                                                                                 label: field.value
@@ -279,6 +284,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                             return (
                                                                 <InputWrapper label='how many windows?'>
                                                                     <InputSlider
+                                                                        name={`floor-${floorIndex}-rooms-${roomIndex}-windows`}
                                                                         min={1}
                                                                         max={15}
                                                                         onChange={(value) =>
@@ -309,6 +315,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                                                 }`}
                                                                             >
                                                                                 <CreatableSelect
+                                                                                    id={`floorDetails-${floorIndex}-rooms-${roomIndex}-windows-${windowIndex}-style`}
                                                                                     className='w-[200px]'
                                                                                     value={{
                                                                                         value: field.value,
@@ -336,6 +343,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                                                 }`}
                                                                             >
                                                                                 <CreatableSelect
+                                                                                    id={`floorDetails-${floorIndex}-rooms-${roomIndex}-windows-${windowIndex}-glassType`}
                                                                                     className='w-[200px]'
                                                                                     value={{
                                                                                         value: field.value,
@@ -366,6 +374,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                                     label={`Additional furnitures for ${roomType}`}
                                                                 >
                                                                     <Select
+                                                                        id={`floorDetails-${floorIndex}-rooms-${roomIndex}-additionalFurniture`}
                                                                         value={{
                                                                             value: field.value,
                                                                             label: field.value
