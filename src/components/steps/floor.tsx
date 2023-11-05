@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useFormContext } from 'react-hook-form';
 import CreatableSelect from 'react-select/creatable';
@@ -39,9 +40,19 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
     const { handleSubmit, control, setValue, getValues, watch } = useFormContext<FloorData>();
 
     const onSubmit = (values: FloorData) => {
-        console.log(values);
         nextFormStep();
+        localStorage.setItem('houseForm', JSON.stringify(values));
     };
+
+    useEffect(() => {
+        const storedForm = localStorage.getItem('houseForm');
+
+        if (storedForm) {
+            const initialData: FloorData = JSON.parse(storedForm);
+
+            setValue('floorDetails', initialData.floorDetails);
+        }
+    }, []);
 
     watch('floorDetails');
 
@@ -146,7 +157,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                         render={({ field }) => {
                             return (
                                 <FormItem className='w-full mb-12'>
-                                    <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70 mb-4'>
+                                    <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
                                         what is the Floor Count?
                                     </FormLabel>
                                     <FormControl>
@@ -182,7 +193,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                     render={({ field }) => {
                                         return (
                                             <FormItem className='w-full mb-12'>
-                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70 mb-4'>
+                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
                                                     What is the room count?
                                                 </FormLabel>
                                                 <FormControl>
@@ -211,7 +222,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                     render={({ field }) => {
                                                         return (
                                                             <FormItem className='w-full mb-12'>
-                                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70 mb-4'>
+                                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
                                                                     What is the room size in square meters?
                                                                 </FormLabel>
                                                                 <FormControl>
@@ -294,7 +305,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                     render={({ field }) => {
                                                         return (
                                                             <FormItem className='w-full mb-12'>
-                                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70 mb-4'>
+                                                                <FormLabel className='flex items-start uppercase text-sm font-bold text-zinc-500 dark:text-secondary/70'>
                                                                     How many windows?
                                                                 </FormLabel>
                                                                 <FormControl>
@@ -315,7 +326,7 @@ const Floor = ({ prevFormStep, nextFormStep, setFormStep, formStep }: Props) => 
                                                         );
                                                     }}
                                                 />
-                                                {room.windows.map((window, windowIndex) => {
+                                                {room.windows.map((_, windowIndex) => {
                                                     return (
                                                         <div key={room.id} className='flex flex-col md:flex-row'>
                                                             <FormField

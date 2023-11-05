@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import Foundation from '@/components/steps/foundation';
 import { FormProvider, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Floor from '@/components/steps/floor';
+import * as z from 'zod';
 import { v4 as uuidv4 } from 'uuid';
 
-import * as z from 'zod';
+import Foundation from '@/components/steps/foundation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Floor from '@/components/steps/floor';
 import Roof from '@/components/steps/roof';
 
 const windowSchema = z.object({

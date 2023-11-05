@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
 
@@ -5,8 +6,7 @@ import InputRadioGroup from '@/components/inputs/input-radio-group';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { roofTypes } from './options/roof-options';
 
-import { useState } from 'react';
-import flowers from './flowers.json';
+import flowers from '../../db/flowers.json';
 import Stepper from '../stepper';
 
 type RoofData = {
@@ -25,9 +25,9 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
     const [flowersList] = useState(flowers);
 
     const onSubmit = (values: RoofData) => {
-        // nextFormStep();
-        console.log(values);
+        localStorage.setItem('houseForm', JSON.stringify(values));
     };
+
     const flowerOptions = flowersList.flowerlist.map((flower) => ({
         value: flower.name,
         label: flower.name
@@ -43,7 +43,6 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
                     Select the roof type and plants you want for your new home!
                 </p>
             </div>
-
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className='flex flex-col items-center justify-between text-center'>
                     <FormField

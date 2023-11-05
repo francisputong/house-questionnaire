@@ -7,6 +7,7 @@ import InputRadioGroup from '@/components/inputs/input-radio-group';
 import Stepper from '@/components/stepper';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { foundationMaterials } from './options/foundation-options';
+import { useEffect } from 'react';
 
 const foundationSizeFields = ['length', 'width', 'height'];
 
@@ -37,15 +38,26 @@ const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const storedForm = localStorage.getItem('houseForm');
+
+        if (storedForm) {
+            const initialData: FoundationData = JSON.parse(storedForm);
+
+            form.setValue('foundationType', initialData.foundationType);
+            form.setValue('foundationSize', initialData.foundationSize);
+        }
+    }, []);
+
     const onSubmit = (values: FoundationData) => {
         nextFormStep();
-        console.log(values);
+        localStorage.setItem('houseForm', JSON.stringify(values));
     };
 
     return (
         <div className='flex flex-col w-full space-y-3'>
             <div className='mb-4'>
-                <p className='font-semibold tracking-tight text-xl lg:text-3xl 2xl:text-4xl text-left'>Foundation</p>
+                <p className='font-semibold text-xl lg:text-3xl 2xl:text-4xl text-left'>Foundation</p>
                 <p className='text-muted-foreground text-sm lg:text-md text-left'>
                     Create your foundation by choosing the details below!
                 </p>

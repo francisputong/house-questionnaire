@@ -49,15 +49,19 @@ const InputSlider = ({ value, label, min, max, onChange }: Props) => {
                 </div>
                 <p className='text-lg'>{label}</p>
             </div>
-            <Slider
-                onValueChange={(e) => onChange(e[0])}
-                defaultValue={[min]}
-                max={max}
-                min={min}
-                step={1}
-                className='w-full'
-                value={[Number(value)]}
-            />
+            <div className='flex flex-row gap-2'>
+                <p>{min}</p>
+                <Slider
+                    onValueChange={(e) => onChange(e[0])}
+                    defaultValue={[min]}
+                    max={max}
+                    min={min}
+                    step={1}
+                    className='w-full'
+                    value={[Number(value)]}
+                />
+                <p>{max}</p>
+            </div>
         </div>
     );
 };
