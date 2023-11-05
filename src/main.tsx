@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
-import './index.css';
 import Home from './pages/home';
 import Start from './pages/start';
 import Finish from './pages/finish';
+import './index.css';
 
 const router = createBrowserRouter(
     createRoutesFromElements(
