@@ -18,6 +18,6 @@ To Build the App:
 
 `npm run build`
 
-To open cypress
+To run cypress tests
 
-`npx cypress open`
+`npx cypress run`
