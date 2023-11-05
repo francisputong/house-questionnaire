@@ -1,22 +1,27 @@
+import StrawRoof from '../../../assets/icons/roof-straw.png';
+import FlatRoof from '../../../assets/icons/roof-flat.png';
+import ThatchedRoof from '../../../assets/icons/roof-thatched.png';
+import TiledRoof from '../../../assets/icons/roof-tiled.png';
+
 export const roofTypes = [
     {
         value: 'Straw',
-        icon: '🧱',
+        icon: StrawRoof,
         name: 'Straw'
     },
     {
         value: 'Thatched',
-        icon: '🪨',
+        icon: ThatchedRoof,
         name: 'Thatched'
     },
     {
         value: 'Tiled',
-        icon: '🪨',
+        icon: TiledRoof,
         name: 'Tiled'
     },
     {
         value: 'Flat',
-        icon: '🪨',
+        icon: FlatRoof,
         name: 'Flat'
     }
 ];

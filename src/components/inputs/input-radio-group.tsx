@@ -34,7 +34,7 @@ const InputRadioGroup = ({ value, radioItems, onChange }: Props) => {
                                     p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-sky-500 peer-data-[state=checked]:bg-secondary 
                                     [&:has([data-state=checked])]:border-primary cursor-pointer'
                         >
-                            {item.icon && <span className='text-2xl lg:text-3xl'>{item.icon}</span>}
+                            {item.icon && <img width={50} src={item.icon} />}
                             {item.name}
                         </Label>
                     </div>

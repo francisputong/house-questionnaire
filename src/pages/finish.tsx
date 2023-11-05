@@ -18,7 +18,6 @@ export default function Finish() {
                 <h1 className='text-4xl lg:text-6xl font-bold text-center leading-relaxed'>Form Submitted!</h1>
 
                 <p className='text-lg text-neutral-400 lg:px-24 mx-auto'>Thank you for using our questionnaire!</p>
-
                 <Button
                     onClick={navigateAndClear}
                     size='lg'

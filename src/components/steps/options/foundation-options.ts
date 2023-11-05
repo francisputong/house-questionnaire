@@ -1,17 +1,21 @@
+import Brick from '../../../assets/icons/Brick.png';
+import Slab from '../../../assets/icons/Slab.png';
+import Concrete from '../../../assets/icons/Concrete.png';
+
 export const foundationMaterials = [
     {
         value: 'brick',
-        icon: '🧱',
+        icon: Brick,
         name: 'Brick'
     },
     {
         value: 'slab',
-        icon: '🪨',
+        icon: Slab,
         name: 'Slab'
     },
     {
         value: 'concrete',
-        icon: '🪨',
+        icon: Concrete,
         name: 'Concrete'
     }
 ];
