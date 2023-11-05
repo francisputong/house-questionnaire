@@ -1,13 +1,11 @@
-import { Button } from '@/components/ui/button';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 export default function Finish() {
     const navigate = useNavigate();
 
-    useEffect(() => localStorage.removeItem('houseForm'), []);
-
     const navigateAndClear = () => {
+        localStorage.removeItem('houseForm');
         navigate('/');
     };
 
@@ -19,6 +17,7 @@ export default function Finish() {
 
                 <p className='text-lg text-neutral-400 lg:px-24 mx-auto'>Thank you for using our questionnaire!</p>
                 <Button
+                    data-cy='finish-button'
                     onClick={navigateAndClear}
                     size='lg'
                     className='w-60 mt-16 py-7 text-xl rounded-full shadow-lg mx-auto text-white pulse-button'

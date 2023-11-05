@@ -85,7 +85,17 @@ describe('Multi Step Form', () => {
                 expect(parsedData.roofType).to.equal('Tiled');
                 expect(parsedData.gardenPlants).to.be.an('array');
                 expect(parsedData.gardenPlants[0].label).to.equal('Azalea');
-                expect(parsedData.gardenPlants[1].label).to.equal('Rosa Burgundyw');
+                expect(parsedData.gardenPlants[1].label).to.equal('Rosa Burgundy');
             });
+
+        cy.get('[data-cy=finish-button]').click();
+
+        cy.window().then((win) => {
+            const keyToCheck = 'houseForm';
+
+            expect(win.localStorage.getItem(keyToCheck)).to.be.null;
+        });
+
+        cy.url().should('eq', Cypress.config().baseUrl);
     });
 });
