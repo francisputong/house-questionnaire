@@ -1,14 +1,16 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { useFormContext } from 'react-hook-form';
+import { motion } from 'framer-motion';
+
 import InputSlider from '@/components/inputs/input-slider';
 import { FormField, FormLabel } from '@/components/ui/form';
 import InputRadioGroup from '@/components/inputs/input-radio-group';
 import Stepper from '@/components/stepper';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { foundationMaterials } from './options/foundation-options';
-import { useEffect } from 'react';
-import InputWrapper from '../inputs/input-wrapper';
+import InputWrapper from '@/components/inputs/input-wrapper';
+import { slideInRight } from '@/lib/animation';
 
 const foundationSizeFields = ['length', 'width', 'height'];
 
@@ -63,8 +65,8 @@ const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
                     Create your foundation by choosing the details below!
                 </p>
             </div>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className='flex flex-col items-center justify-between text-center'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='overflow-x-hidden'>
+                <motion.div {...slideInRight} className='flex flex-col items-center justify-between text-center'>
                     <FormField
                         control={form.control}
                         name='foundationType'
@@ -107,7 +109,7 @@ const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
                             );
                         })}
                     </div>
-                </div>
+                </motion.div>
                 <Stepper backAction={() => navigate('/')} setFormStep={setFormStep} formStep={formStep} />
             </form>
         </div>

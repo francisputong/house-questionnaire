@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Select from 'react-select';
+import { motion } from 'framer-motion';
 
 import InputRadioGroup from '@/components/inputs/input-radio-group';
 import { FormField } from '@/components/ui/form';
@@ -9,6 +10,7 @@ import { roofTypes } from './options/roof-options';
 import flowers from '../../db/flowers.json';
 import Stepper from '../stepper';
 import InputWrapper from '../inputs/input-wrapper';
+import { slideInRight } from '@/lib/animation';
 
 type RoofData = {
     roofType: 'straw' | 'thatched' | 'tiled' | 'flat';
@@ -44,8 +46,8 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
                     Select the roof type and plants you want for your new home!
                 </p>
             </div>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className='flex flex-col items-center justify-between text-center'>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='overflow-x-hidden'>
+                <motion.div {...slideInRight} className='flex flex-col items-center justify-between text-center'>
                     <FormField
                         control={form.control}
                         name='roofType'
@@ -82,7 +84,7 @@ const Roof = ({ prevFormStep, setFormStep, formStep }: Props) => {
                             );
                         }}
                     />
-                </div>
+                </motion.div>
                 <Stepper backAction={prevFormStep} setFormStep={setFormStep} formStep={formStep} />
             </form>
         </div>
