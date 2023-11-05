@@ -10,32 +10,9 @@ import InputSlider from '@/components/inputs/input-slider';
 import Stepper from '@/components/stepper';
 import InputRadioGroup from '@/components/inputs/input-radio-group';
 import InputWrapper from '@/components/inputs/input-wrapper';
+import { HouseFormData } from '@/pages/start';
 
 const foundationSizeFields = ['length', 'width', 'height'];
-
-type FoundationData = {
-    foundationType: string;
-    foundationSize: {
-        length: number;
-        width: number;
-        height: number;
-    };
-    floorDetails: {
-        id: string;
-        rooms: {
-            id: string;
-            size: number;
-            roomType: string;
-            floorType: string;
-            additionalFurniture: string;
-            windows: {
-                id: string;
-                style: string;
-                glassType: string;
-            }[];
-        }[];
-    }[];
-};
 
 type Props = {
     nextFormStep: () => void;
@@ -43,22 +20,22 @@ type Props = {
     formStep: number;
 };
 
-function mapFieldNameToField(fieldName: string): keyof FoundationData {
+function mapFieldNameToField(fieldName: string): keyof HouseFormData {
     if (foundationSizeFields.includes(fieldName)) {
-        return `foundationSize.${fieldName}` as keyof FoundationData;
+        return `foundationSize.${fieldName}` as keyof HouseFormData;
     }
     throw new Error('Invalid field name');
 }
 
 const Foundation = ({ formStep, nextFormStep, setFormStep }: Props) => {
-    const form = useFormContext<FoundationData>();
+    const form = useFormContext<HouseFormData>();
 
     const navigate = useNavigate();
 
-    const onSubmit = (values: FoundationData) => {
+    const onSubmit = (values: HouseFormData) => {
         const storedData = localStorage.getItem('houseForm');
         if (storedData) {
-            const parsedData: FoundationData = JSON.parse(storedData);
+            const parsedData: HouseFormData = JSON.parse(storedData);
 
             parsedData.foundationType = values.foundationType;
             parsedData.foundationSize = values.foundationSize;
