@@ -1,16 +1,22 @@
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
-    backAction: () => void;
     setFormStep: (step: number) => void;
+    prevFormStep: () => void;
+    nextFormStep: () => void;
     formStep: number;
 };
 
-const Stepper = ({ backAction, setFormStep, formStep }: Props) => {
+const Stepper = ({ prevFormStep, setFormStep, nextFormStep, formStep }: Props) => {
+    const navigate = useNavigate();
     return (
-        <div className='hborder-t-2 py-3 px-8 bg-opacity-50 backdrop-blur-md bg-white z-50 fixed bottom-0 left-0 w-full flex justify-between h-[70px] md-[80px]'>
-            <Button onClick={backAction} className='h-12 md:h-full text-lg w-32 pulse-button'>
+        <nav className='hborder-t-2 py-3 px-8 bg-opacity-50 backdrop-blur-md bg-white z-50 fixed bottom-0 left-0 w-full flex justify-between h-[70px] md-[80px]'>
+            <Button
+                onClick={formStep === 0 ? () => navigate('/') : prevFormStep}
+                className='h-12 md:h-full text-lg w-32 pulse-button'
+            >
                 Back
             </Button>
             <div className='hidden md:flex w-[250px] justify-between relative'>
@@ -58,10 +64,20 @@ const Stepper = ({ backAction, setFormStep, formStep }: Props) => {
                     🪴
                 </Button>
             </div>
-            <Button data-cy='submit-button' type='submit' className='h-12 md:h-full text-lg w-32 pulse-button'>
-                Next
-            </Button>
-        </div>
+            {formStep === 2 ? (
+                <Button data-cy='submit-button' className='h-12 md:h-full text-lg w-32 pulse-button'>
+                    Submit
+                </Button>
+            ) : (
+                <Button
+                    data-cy='next-button'
+                    onClick={nextFormStep}
+                    className='h-12 md:h-full text-lg w-32 pulse-button'
+                >
+                    Next
+                </Button>
+            )}
+        </nav>
     );
 };
 

@@ -1,41 +1,15 @@
 import { useEffect, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 
+import { formSchemaValidate } from '@/lib/schema';
 import Foundation from '@/components/steps/foundation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Floor from '@/components/steps/floor';
 import Roof from '@/components/steps/roof';
-
-const windowSchema = z.object({
-    style: z.string(),
-    glassType: z.string()
-});
-
-const roomSchema = z.object({
-    size: z.number().min(1),
-    roomType: z.string(),
-    floorType: z.string(),
-    additionalFurniture: z.string(),
-    windows: z.array(windowSchema)
-});
-
-const floorDetailSchema = z.object({
-    rooms: z.array(roomSchema)
-});
-
-const formSchemaValidate = z.object({
-    foundationType: z.string().min(1, 'Please select a foundation'),
-    foundationSize: z.object({
-        length: z.number().min(1),
-        width: z.number().min(1),
-        height: z.number().min(1)
-    }),
-    floorDetails: z.array(floorDetailSchema),
-    roofType: z.string().min(1, 'Please select a roof type'),
-    gardenPlants: z.array(z.object({ label: z.string(), value: z.string() }))
-});
+import Stepper from '@/components/stepper';
+import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
 
 export type HouseFormData = {
     foundationType: string;
@@ -59,18 +33,19 @@ export type HouseFormData = {
             }[];
         }[];
     }[];
-    roofType: 'Straw' | 'Thatched' | 'Tiled' | 'Flat';
+    roofType: string;
     gardenPlants: { label: string; value: string }[];
 };
 
+type FieldName = keyof HouseFormData;
+
+const stepFields = [['foundationType', 'foundationSize'], ['floorDetails'], ['roofType', 'gardenPlants']];
+
 export default function Start() {
     const [formStep, setFormStep] = useState(0);
+    const navigate = useNavigate();
 
-    const nextFormStep = () => setFormStep((currentStep) => currentStep + 1);
-
-    const prevFormStep = () => setFormStep((currentStep) => currentStep - 1);
-
-    const form = useForm({
+    const form = useForm<z.infer<typeof formSchemaValidate>>({
         resolver: zodResolver(formSchemaValidate),
         defaultValues: {
             foundationType: '',
@@ -86,13 +61,13 @@ export default function Start() {
                         {
                             id: uuidv4(),
                             size: 50,
-                            roomType: 'Bedroom',
-                            floorType: 'Wood',
+                            roomType: '',
+                            floorType: '',
                             windows: [
                                 {
                                     id: uuidv4(),
-                                    style: 'Bay',
-                                    glassType: 'Tempered'
+                                    style: '',
+                                    glassType: ''
                                 }
                             ],
                             additionalFurniture: ''
@@ -100,10 +75,29 @@ export default function Start() {
                     ]
                 }
             ],
-            roofType: 'Straw',
+            roofType: '',
             gardenPlants: [{ label: 'Azalea', value: 'Azalea' }]
         }
     });
+
+    const onSubmit: SubmitHandler<HouseFormData> = () => {
+        localStorage.setItem('houseForm', JSON.stringify(form.getValues()));
+
+        navigate('/finish');
+    };
+    const nextFormStep = async () => {
+        const output = await form.trigger(stepFields[formStep] as FieldName[], { shouldFocus: true });
+        if (!output) return;
+
+        if (formStep === 2) {
+            form.handleSubmit(onSubmit);
+        } else {
+            localStorage.setItem('houseForm', JSON.stringify(form.getValues()));
+            setFormStep((currentStep) => currentStep + 1);
+        }
+    };
+
+    const prevFormStep = () => setFormStep((currentStep) => currentStep - 1);
 
     useEffect(() => {
         const storedForm = localStorage.getItem('houseForm');
@@ -121,22 +115,19 @@ export default function Start() {
         <div className='flex items-center justify-center h-screen max-w-screen-lg mx-auto p-5'>
             {/* header */}
             <div className='flex flex-col gap-6 lg:gap-12 text-center w-full mx-auto h-full'>
-                <FormProvider {...form}>
-                    {formStep === 0 && (
-                        <Foundation formStep={formStep} setFormStep={setFormStep} nextFormStep={nextFormStep} />
-                    )}
-                    {formStep === 1 && (
-                        <Floor
-                            formStep={formStep}
-                            setFormStep={setFormStep}
-                            prevFormStep={prevFormStep}
-                            nextFormStep={nextFormStep}
-                        />
-                    )}
-                    {formStep === 2 && (
-                        <Roof formStep={formStep} setFormStep={setFormStep} prevFormStep={prevFormStep} />
-                    )}
-                </FormProvider>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <FormProvider {...form}>
+                        {formStep === 0 && <Foundation />}
+                        {formStep === 1 && <Floor />}
+                        {formStep === 2 && <Roof />}
+                    </FormProvider>
+                    <Stepper
+                        nextFormStep={nextFormStep}
+                        setFormStep={setFormStep}
+                        formStep={formStep}
+                        prevFormStep={prevFormStep}
+                    />
+                </form>
             </div>
         </div>
     );

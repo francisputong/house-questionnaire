@@ -6,9 +6,10 @@ type Props = {
     children: ReactNode;
     label?: string;
     className?: string;
+    isError?: boolean;
 };
 
-const InputWrapper = ({ children, label, className }: Props) => {
+const InputWrapper = ({ children, label, className, isError = true }: Props) => {
     return (
         <FormItem className={cn('w-full mb-12', className)}>
             {label && (
@@ -17,7 +18,7 @@ const InputWrapper = ({ children, label, className }: Props) => {
                 </FormLabel>
             )}
             <FormControl>{children}</FormControl>
-            <FormMessage />
+            {isError && <FormMessage className='text-left' />}
         </FormItem>
     );
 };
