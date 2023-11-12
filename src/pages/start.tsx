@@ -80,8 +80,8 @@ export default function Start() {
         }
     });
 
-    const onSubmit: SubmitHandler<HouseFormData> = () => {
-        localStorage.setItem('houseForm', JSON.stringify(form.getValues()));
+    const onSubmit: SubmitHandler<HouseFormData> = (values) => {
+        localStorage.setItem('houseForm', JSON.stringify(values));
 
         navigate('/finish');
     };
@@ -90,7 +90,7 @@ export default function Start() {
         if (!output) return;
 
         if (formStep === 2) {
-            form.handleSubmit(onSubmit);
+            onSubmit(form.getValues());
         } else {
             localStorage.setItem('houseForm', JSON.stringify(form.getValues()));
             setFormStep((currentStep) => currentStep + 1);
@@ -121,13 +121,13 @@ export default function Start() {
                         {formStep === 1 && <Floor />}
                         {formStep === 2 && <Roof />}
                     </FormProvider>
-                    <Stepper
-                        nextFormStep={nextFormStep}
-                        setFormStep={setFormStep}
-                        formStep={formStep}
-                        prevFormStep={prevFormStep}
-                    />
                 </form>
+                <Stepper
+                    nextFormStep={nextFormStep}
+                    setFormStep={setFormStep}
+                    formStep={formStep}
+                    prevFormStep={prevFormStep}
+                />
             </div>
         </div>
     );

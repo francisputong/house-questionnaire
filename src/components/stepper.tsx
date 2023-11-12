@@ -37,6 +37,7 @@ const Stepper = ({ prevFormStep, setFormStep, nextFormStep, formStep }: Props) =
                     )}
                 />
                 <Button
+                    disabled={formStep < 1}
                     onClick={() => setFormStep(1)}
                     variant='outline'
                     className={cn(
@@ -54,6 +55,7 @@ const Stepper = ({ prevFormStep, setFormStep, nextFormStep, formStep }: Props) =
                 />
 
                 <Button
+                    disabled={formStep < 2}
                     onClick={() => setFormStep(2)}
                     variant='outline'
                     className={cn(
@@ -64,19 +66,9 @@ const Stepper = ({ prevFormStep, setFormStep, nextFormStep, formStep }: Props) =
                     🪴
                 </Button>
             </div>
-            {formStep === 2 ? (
-                <Button data-cy='submit-button' className='h-12 md:h-full text-lg w-32 pulse-button'>
-                    Submit
-                </Button>
-            ) : (
-                <Button
-                    data-cy='next-button'
-                    onClick={nextFormStep}
-                    className='h-12 md:h-full text-lg w-32 pulse-button'
-                >
-                    Next
-                </Button>
-            )}
+            <Button data-cy='next-button' onClick={nextFormStep} className='h-12 md:h-full text-lg w-32 pulse-button'>
+                Next
+            </Button>
         </nav>
     );
 };

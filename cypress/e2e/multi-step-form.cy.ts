@@ -70,7 +70,7 @@ describe('Multi Step Form', () => {
         cy.get('[data-cy=Tiled]').click();
         cy.get(`#gardenPlants`).type('rosa bur{enter}');
 
-        cy.get('[data-cy=submit-button]').click();
+        cy.get('[data-cy=next-button]').click();
 
         cy.window()
             .its('localStorage.houseForm')
